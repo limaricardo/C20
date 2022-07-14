@@ -1,5 +1,4 @@
 console.clear();
-
 const prompt = require("prompt-sync")();
 
 let candidato1 = prompt("Digite o nome do candidato 1: ");
@@ -13,32 +12,31 @@ let votoNulo = 0;
 let votoBranco = 0;
 
 do {
-  let anoNascimento = parseInt(prompt("Qual seu ano de nascimento? "));
+  let anoNascimento = parseInt(prompt("Qual o seu ano de nascimento? "));
 
   function autorizaVoto(anoNascimento) {
     const anoAtual = new Date().getFullYear();
+    const idade = anoAtual - anoNascimento;
 
-    if (anoAtual - anoNascimento < 16) {
+    if (idade < 16) {
       return "Negado";
-    } else if (anoAtual - anoNascimento < 18) {
+    } else if (idade < 18 || idade > 60) {
       return "Opcional";
     } else {
-      return "Obrigatório";
+      return "Obrigatorio";
     }
   }
-
-  const autorizacao = autorizaVoto(anoNascimento);
-  console.log(autorizacao);
-
-  do {
-    var voto = parseInt(prompt(`Digite seu voto: 1 - ${candidato1} | 2 - ${candidato2} | 3 - ${candidato3} | 4 - Voto Nulo | 5 - Voto em Branco | Seu voto: `));
-  }while (voto < 1 || voto > 5)
-  
 
   function votacao(autorizacao, voto) {
     if (autorizacao === "Negado") {
       return console.log("Você não pode votar");
     }
+
+    voto = parseInt(
+      prompt(
+        `Digite seu voto: 1 - ${candidato1} | 2 - ${candidato2} | 3 - ${candidato3} | 4 - Voto em Branco | 5 - Voto Nulo | Seu voto foi: `
+      )
+    );
 
     if (voto == 1) {
       c1++;
@@ -47,30 +45,44 @@ do {
     } else if (voto == 3) {
       c3++;
     } else if (voto == 4) {
-      votoNulo++;
-    } else if (voto == 5) {
       votoBranco++;
+    } else {
+      votoNulo++;
     }
   }
 
+  let voto;
+
+  const autorizacao = autorizaVoto(anoNascimento);
   votacao(autorizacao, voto);
 
   var pessoasParaVotar = parseInt(
-    prompt(
-      `Existe mais alguém para votar? 1 - Sim 2 - Não | Resposta: `
-    ).toLowerCase()
+    prompt(`Existe mais alguém para votar? 1 - Sim | 2 - Não : `)
   );
 } while (pessoasParaVotar == 1);
 
-function exibirResultados() {
+let eleito;
+
+if (c1 > c2 && c1 > c3) {
+  eleito = candidato1;
+} else if (c2 > c1 && c2 > c3) {
+  eleito = candidato2;
+} else if (c3 > c1 && c3 > c2) {
+  eleito = candidato3;
+}
+
+console.log(eleito);
+
+function exibaResultados() {
   return console.log(`
   O total de votos foi de:
   ${candidato1} - ${c1}
   ${candidato2} - ${c2}
   ${candidato3} - ${c3}
-  Votos Nulos - ${votoNulo}
-  Votos em Branco - ${votoBranco}
+  Voto em Branco - ${votoBranco}
+  Voto nulo - ${votoNulo}
+  O candidato eleito foi: ${eleito}
   `);
 }
 
-exibirResultados();
+exibaResultados();
