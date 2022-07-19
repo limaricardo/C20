@@ -1,13 +1,25 @@
 console.clear();
 const prompt = require("prompt-sync")();
 
-let candidato1 = prompt("Digite o nome do candidato 1: ");
-let candidato2 = prompt("Digite o nome do candidato 2: ");
-let candidato3 = prompt("Digite o nome do candidato 3: ");
 
-let c1 = 0;
-let c2 = 0;
-let c3 = 0;
+let candidatos = [
+  {
+    nome: prompt("Digite o nome do candidato 1: "),
+    votos: 0,
+    idade: 50
+  },
+  {
+    nome: prompt("Digite o nome do candidato 2: "),
+    votos: 0,
+    idade: 60
+  },
+  {
+    nome: prompt("Digite o nome do candidato 3: "),
+    votos: 0,
+    idade: 40
+  }
+]
+
 let votoNulo = 0;
 let votoBranco = 0;
 
@@ -34,16 +46,16 @@ do {
 
     voto = parseInt(
       prompt(
-        `Digite seu voto: 1 - ${candidato1} | 2 - ${candidato2} | 3 - ${candidato3} | 4 - Voto em Branco | 5 - Voto Nulo | Seu voto foi: `
+        `Digite seu voto: 1 - ${candidatos[0].nome} | 2 - ${candidatos[1].nome} | 3 - ${candidatos[2].nome} | 4 - Voto em Branco | 5 - Voto Nulo | Seu voto foi: `
       )
     );
 
     if (voto == 1) {
-      c1++;
+      candidatos[0].votos++;
     } else if (voto == 2) {
-      c2++;
+      candidatos[1].votos++;
     } else if (voto == 3) {
-      c3++;
+      candidatos[2].votos++;
     } else if (voto == 4) {
       votoBranco++;
     } else {
@@ -61,24 +73,25 @@ do {
   );
 } while (pessoasParaVotar == 1);
 
-let eleito;
 
-if (c1 > c2 && c1 > c3) {
-  eleito = candidato1;
-} else if (c2 > c1 && c2 > c3) {
-  eleito = candidato2;
-} else if (c3 > c1 && c3 > c2) {
-  eleito = candidato3;
-}
+const maiorVoto = Math.max(...candidatos.map( candidato => candidato.votos))
+const maiorIdade = Math.max(...candidatos.map ( candidato => candidato.idade))
 
-console.log(eleito);
+
+let eleito = '';
+candidatos.map((candidato) => {
+  if(candidato.votos === maiorVoto && candidato.idade === maiorIdade){
+    eleito = candidato.nome;
+  }
+})
+
 
 function exibaResultados() {
   return console.log(`
   O total de votos foi de:
-  ${candidato1} - ${c1}
-  ${candidato2} - ${c2}
-  ${candidato3} - ${c3}
+  ${candidatos[0].nome} - ${candidatos[0].votos}
+  ${candidatos[1].nome} - ${candidatos[1].votos}
+  ${candidatos[2].nome} - ${candidatos[2].votos}
   Voto em Branco - ${votoBranco}
   Voto nulo - ${votoNulo}
   O candidato eleito foi: ${eleito}
