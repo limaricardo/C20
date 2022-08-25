@@ -18,9 +18,11 @@ router.get('/characters/find/:id', personagemController.findCharacterByIdControl
 
 // router.post('/characters/create', personagemController.createCharacterController)
 
-// router.put('/characters/update/:id', personagemController.updateCharacterController)
+router.put('/characters/update/', personagemController.checkIdController)
+router.put('/characters/update/:id', personagemController.updateCharacterController)
 
-// router.delete('/characters/delete/:id', personagemController.deleteCharacterController)
+router.delete('/characters/delete/', personagemController.checkIdController)
+router.delete('/characters/delete/:id', personagemController.deleteCharacterController)
 
 
 module.exports = router;
